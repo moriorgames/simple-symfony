@@ -93,7 +93,7 @@ class User
         return [
             'name'      => $this->name,
             'slug'      => $this->slug,
-            'purchases' => $this->purchases,
+            'purchases' => $this->purchasesToArray(),
         ];
     }
 }

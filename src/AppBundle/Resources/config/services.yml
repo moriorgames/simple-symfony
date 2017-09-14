@@ -5,3 +5,19 @@ services:
         class: AppBundle\Services\MysqlNow
         arguments:
             - "@doctrine.dbal.default_connection"
+
+    app.user_repository:
+        class: AppBundle\Repository\UserRepository
+        factory:
+            - "@doctrine.orm.default_entity_manager"
+            - getRepository
+        arguments:
+            - AppBundle\Entity\User
+
+    app.shop_product_repository:
+        class: AppBundle\Repository\ShopProductRepository
+        factory:
+            - "@doctrine.orm.default_entity_manager"
+            - getRepository
+        arguments:
+            - AppBundle\Entity\ShopProduct

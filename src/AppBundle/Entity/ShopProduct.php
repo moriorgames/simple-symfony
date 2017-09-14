@@ -201,4 +201,19 @@ class ShopProduct
 
         return $this;
     }
+
+    /**
+     * @return array
+     */
+    public function toArray(): array
+    {
+        return [
+            'description'       => $this->description,
+            'product_type'      => $this->productType,
+            'price'             => $this->price,
+            'quantity'          => $this->quantity,
+            'available_in_shop' => $this->availableInShop,
+            'priority'          => $this->priority,
+        ];
+    }
 }
