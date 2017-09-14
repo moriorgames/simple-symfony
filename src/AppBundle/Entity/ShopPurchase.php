@@ -97,6 +97,8 @@ class ShopPurchase
             'product_description' => $this->shopProduct->getDescription(),
             'product_price'       => $this->shopProduct->getPrice(),
             'product_quantity'    => $this->shopProduct->getQuantity(),
+            'created_at'          => $this->createdAt,
+            'updated_at'          => $this->updatedAt,
         ];
     }
 }
