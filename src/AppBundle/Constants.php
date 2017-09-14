@@ -8,4 +8,6 @@ namespace AppBundle;
 final class Constants
 {
     const SOME_APPLICATION_CONSTANT = 'constant';
+
+    const EMPTY_SLUG = 'n-a';
 }

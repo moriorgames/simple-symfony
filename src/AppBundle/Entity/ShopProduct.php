@@ -21,29 +21,16 @@ class ShopProduct
     use IdentifiableTrait;
 
     // This part is to replace very small relations OR to simulate ENUM field. It simply works
-    const PRODUCT_REWARD = 'reward';
+    const PRODUCT_TYPE_GEM = 'gem';
 
-    const PRODUCT_HARD_CURRENCY = 'hard-currency';
+    const PRODUCT_TYPE_JADE = 'jade';
 
-    const PRODUCT_SOFT_CURRENCY = 'soft-currency';
+    const PRODUCT_TYPE_DIAMOND = 'diamond';
 
     const PRODUCTS_TYPE_AVAILABLE = [
-        self::PRODUCT_REWARD,
-        self::PRODUCT_HARD_CURRENCY,
-        self::PRODUCT_SOFT_CURRENCY,
-    ];
-
-    // This part is to replace very small relations OR to simulate ENUM field. It simply works
-    const CURRENCY_SOFT = 'soft';
-
-    const CURRENCY_HARD = 'hard';
-
-    const CURRENCY_REAL = 'real';
-
-    const CURRENCIES_AVAILABLE = [
-        self::CURRENCY_SOFT,
-        self::CURRENCY_HARD,
-        self::CURRENCY_REAL,
+        self::PRODUCT_TYPE_GEM,
+        self::PRODUCT_TYPE_JADE,
+        self::PRODUCT_TYPE_DIAMOND,
     ];
 
     /**
@@ -62,15 +49,6 @@ class ShopProduct
      * @Assert\NotNull()
      */
     private $productType;
-
-    /**
-     * @var string
-     *
-     * @ORM\Column(type="string")
-     * @Assert\Type(type="string")
-     * @Assert\NotNull()
-     */
-    private $currencyType;
 
     /**
      * @var int
@@ -140,30 +118,6 @@ class ShopProduct
         }
 
         $this->productType = $productType;
-
-        return $this;
-    }
-
-    /**
-     * @return string
-     */
-    public function getCurrencyType(): string
-    {
-        return $this->currencyType;
-    }
-
-    /**
-     * @param string $currencyType
-     *
-     * @return $this
-     */
-    public function setCurrencyType(string $currencyType)
-    {
-        if (!in_array($currencyType, self::CURRENCIES_AVAILABLE)) {
-            throw new UnexpectedValueException('Typology "' . $currencyType . '" is not allowed');
-        }
-
-        $this->currencyType = $currencyType;
 
         return $this;
     }
