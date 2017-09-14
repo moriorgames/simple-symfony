@@ -3,7 +3,9 @@
 namespace AppBundle\Command;
 
 use DateTime;
+use AppBundle\Entity\User;
 use AppBundle\Entity\ShopProduct;
+use AppBundle\Entity\ShopPurchase;
 use Doctrine\Common\Persistence\ObjectManager;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -15,10 +17,8 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
  * Class LoadFixturesCommand
  * @package AppBundle\Command
  */
-class LoadShopFixturesCommand extends ContainerAwareCommand
+class LoadFixturesCommand extends ContainerAwareCommand
 {
-    const MAX_ATTEMPTS = 5;
-
     const COMMAND_NAME = 'app:fixtures';
 
     /**
@@ -52,6 +52,7 @@ class LoadShopFixturesCommand extends ContainerAwareCommand
     protected function initialize(InputInterface $input, OutputInterface $output)
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->now = $this->getContainer()->get('app.mysql_now')->get();
     }
 
     /**
@@ -60,12 +61,19 @@ class LoadShopFixturesCommand extends ContainerAwareCommand
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->now = $this->getContainer()->get('app.mysql_now')->get();
         $startTime = microtime(true);
 
-        $this->loadShopProductFixtures();
+        $user = $this->loadUserFixtures($output);
+        $this->em->flush();
+        $output->writeln(sprintf('[OK] User was successfully created'));
+
+        $shopProduct = $this->loadShopProductFixtures($output);
         $this->em->flush();
         $output->writeln(sprintf('[OK] Shop Products were successfully created'));
+
+        $this->loadShopPurchase($user, $shopProduct, $output);
+        $this->em->flush();
+        $output->writeln(sprintf('[OK] Shop Purchase was successfully created'));
 
         $output->writeln('');
 
@@ -79,15 +87,40 @@ class LoadShopFixturesCommand extends ContainerAwareCommand
      * @param OutputInterface $output
      *
      * Load Shop Products fixtures
+     *
+     * @return User
      */
-    private function loadShopProductFixtures(OutputInterface $output)
+    private function loadUserFixtures(OutputInterface $output): User
     {
-        foreach (FixturesShopProducts::PRODUCTS as $data) {
+        foreach (Fixtures::USERS as $data) {
+
+            $user = new User;
+            $user
+                ->setName($data['name'])
+                ->setCreatedAt($this->now)
+                ->setUpdatedAt($this->now);
+            $this->em->persist($user);
+            $output->writeln(sprintf('[OK] User ' . $data['name'] . ' Has been inserted'));
+
+        }
+
+        return $user;
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * Load Shop Products fixtures
+     *
+     * @return ShopProduct
+     */
+    private function loadShopProductFixtures(OutputInterface $output): ShopProduct
+    {
+        foreach (Fixtures::SHOP_PRODUCTS as $data) {
 
             $shopProduct = new ShopProduct;
             $shopProduct
                 ->setDescription($data['description'])
-                ->setCurrencyType($data['currency_type'])
                 ->setProductType($data['product_type'])
                 ->setPrice($data['price'])
                 ->setQuantity($data['quantity'])
@@ -97,5 +130,24 @@ class LoadShopFixturesCommand extends ContainerAwareCommand
             $output->writeln(sprintf('[OK] Shop Product ' . $data['description'] . ' Has been inserted'));
 
         }
+
+        return $shopProduct;
+    }
+
+    /**
+     * @param OutputInterface $output
+     *
+     * Load Shop Products fixtures
+     */
+    private function loadShopPurchase(User $user, ShopProduct $shopProduct, OutputInterface $output)
+    {
+        $shopPurchase = new ShopPurchase;
+        $shopPurchase
+            ->setUser($user)
+            ->setShopProduct($shopProduct)
+            ->setCreatedAt($this->now)
+            ->setUpdatedAt($this->now);
+        $this->em->persist($shopPurchase);
+        $output->writeln(sprintf('[OK] Shop Purchase has been registered on the System!'));
     }
 }

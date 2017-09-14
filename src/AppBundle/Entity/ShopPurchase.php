@@ -23,79 +23,23 @@ class ShopPurchase
     use DateTimeTrait;
 
     /**
-     * @var int
+     * @var User
      *
-     * @ORM\Column(type="integer")
-     * @Assert\Type(type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="purchases")
+     * @ORM\JoinColumn(referencedColumnName="id")
      */
-    private $productId;
+    private $user;
 
     /**
-     * @var int
+     * @var ShopProduct
      *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\ShopProduct")
+     * @ORM\JoinColumn(referencedColumnName="id")
      */
-    private $userId;
+    private $shopProduct;
 
     /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $level;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $victory;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $defeat;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $draw;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $gold;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $valve;
-
-    /**
-     * @var int
-     *
-     * @ORM\Column(type="integer", options={"default"=1})
-     * @Assert\Type(type="integer")
-     */
-    private $diamonds;
-
-    /**
-     * Session constructor.
+     * ShopPurchase constructor.
      */
     public function __construct()
     {
@@ -104,230 +48,55 @@ class ShopPurchase
     }
 
     /**
-     * @return int
+     * @return User
      */
-    public function getId(): int
+    public function getUser(): User
     {
-        return $this->id;
+        return $this->user;
     }
 
     /**
-     * @return DateTime
-     */
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @param DateTime $createdAt
+     * @param User $user
      *
      * @return $this
      */
-    public function setCreatedAt(DateTime $createdAt)
+    public function setUser(User $user)
     {
-        $this->createdAt = $createdAt;
+        $this->user = $user;
 
         return $this;
     }
 
     /**
-     * @return DateTime
+     * @return ShopProduct
      */
-    public function getUpdatedAt(): DateTime
+    public function getShopProduct(): ShopProduct
     {
-        return $this->updatedAt;
+        return $this->shopProduct;
     }
 
     /**
-     * @param DateTime $updatedAt
+     * @param ShopProduct $shopProduct
      *
      * @return $this
      */
-    public function setUpdatedAt(DateTime $updatedAt)
+    public function setShopProduct(ShopProduct $shopProduct)
     {
-        $this->updatedAt = $updatedAt;
+        $this->shopProduct = $shopProduct;
 
         return $this;
     }
 
     /**
-     * @return int
+     * @return array
      */
-    public function getUserId(): int
+    public function toArray(): array
     {
-        return $this->userId;
-    }
-
-    /**
-     * @param int $userId
-     *
-     * @return $this
-     */
-    public function setUserId(int $userId)
-    {
-        $this->userId = $userId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getProductId()
-    {
-        return $this->productId;
-    }
-
-    /**
-     * @param int $productId
-     *
-     * @return $this
-     */
-    public function setProductId($productId)
-    {
-        $this->productId = $productId;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getLevel(): int
-    {
-        return $this->level;
-    }
-
-    /**
-     * @param int $level
-     *
-     * @return $this
-     */
-    public function setLevel(int $level)
-    {
-        $this->level = $level;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getVictory(): int
-    {
-        return $this->victory;
-    }
-
-    /**
-     * @param int $victory
-     *
-     * @return $this
-     */
-    public function setVictory(int $victory)
-    {
-        $this->victory = $victory;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDefeat(): int
-    {
-        return $this->defeat;
-    }
-
-    /**
-     * @param int $defeat
-     *
-     * @return $this
-     */
-    public function setDefeat(int $defeat)
-    {
-        $this->defeat = $defeat;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDraw(): int
-    {
-        return $this->draw;
-    }
-
-    /**
-     * @param int $draw
-     *
-     * @return $this
-     */
-    public function setDraw(int $draw)
-    {
-        $this->draw = $draw;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getGold(): int
-    {
-        return $this->gold;
-    }
-
-    /**
-     * @param int $gold
-     *
-     * @return $this
-     */
-    public function setGold(int $gold)
-    {
-        $this->gold = $gold;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getValve(): int
-    {
-        return $this->valve;
-    }
-
-    /**
-     * @param int $valve
-     *
-     * @return $this
-     */
-    public function setValve(int $valve)
-    {
-        $this->valve = $valve;
-
-        return $this;
-    }
-
-    /**
-     * @return int
-     */
-    public function getDiamonds(): int
-    {
-        return $this->diamonds;
-    }
-
-    /**
-     * @param int $diamonds
-     *
-     * @return $this
-     */
-    public function setDiamonds(int $diamonds)
-    {
-        $this->diamonds = $diamonds;
-
-        return $this;
+        return [
+            'product_type'        => $this->shopProduct->getProductType(),
+            'product_description' => $this->shopProduct->getDescription(),
+            'product_price'       => $this->shopProduct->getPrice(),
+            'product_quantity'    => $this->shopProduct->getQuantity(),
+        ];
     }
 }

@@ -1,0 +1,7 @@
+# Declare your services to get initializer on Container Service
+services:
+
+    app.mysql_now:
+        class: AppBundle\Services\MysqlNow
+        arguments:
+            - "@doctrine.dbal.default_connection"
